@@ -1,0 +1,107 @@
+# This workflow installs dependencies via pixi and runs tests, lint and coverage.
+# See https://pixi.prefix.dev/latest/integration/ci/github_actions/
+
+name: Python package
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: "0 8 * * *"
+
+jobs:
+
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      # https://github.com/actions/checkout
+      # https://github.com/prefix-dev/setup-pixi
+      # https://github.com/codecov/codecov-action
+      - uses: actions/checkout@v4
+
+      - name: Set up pixi
+        uses: prefix-dev/setup-pixi@v0.8.3
+        with:
+          environments: py311 py312 py313
+          cache: true
+          frozen: true
+
+      - name: Test (Linux / macOS)
+        if: matrix.os != 'windows-latest'
+        run: pixi run test-all
+
+      - name: Test (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          pixi run --environment py311 test
+          pixi run --environment py312 test
+          pixi run --environment py313 test
+
+      - name: Lint
+        if: matrix.os == 'ubuntu-latest'
+        run: pixi run --environment py313 lint-check
+
+      - name: Coverage
+        if: matrix.os == 'ubuntu-latest'
+        run: pixi run --environment py313 -- pytest -v --cov=src tests --ignore=tests/test_notebooks.py --cov-report=xml --cov-report=term-missing
+
+      - name: Upload to Codecov
+        if: github.ref == 'refs/heads/main' && matrix.os == 'ubuntu-latest'
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./coverage.xml
+          flags: unittests
+          verbose: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  pages-build:
+    runs-on: ubuntu-latest
+    steps:
+      # https://github.com/actions/upload-pages-artifact
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up micromamba
+        uses: mamba-org/setup-micromamba@v3
+
+      - name: Set up pixi
+        uses: prefix-dev/setup-pixi@v0.8.3
+        with:
+          environments: default
+          cache: true
+          frozen: true
+
+      - name: Create page
+        run: |
+          pixi run lite-build || true
+          ls -la workspace
+          mv workspace/public .
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
+
+  deploy:
+    needs: pages-build
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    steps:
+      # https://github.com/actions/deploy-pages
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

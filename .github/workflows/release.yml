@@ -1,0 +1,46 @@
+name: Publish to PyPI
+
+on:
+  release:
+    types: [published]
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      # https://github.com/actions/checkout
+      # https://github.com/prefix-dev/setup-pixi
+      # https://github.com/pypa/gh-action-pypi-publish
+      # https://github.com/softprops/action-gh-release
+      - uses: actions/checkout@v4
+
+      - name: Set up pixi
+        uses: prefix-dev/setup-pixi@v0.8.3
+        with:
+          environments: dev
+          cache: true
+          frozen: true
+
+      - name: Build the package
+        run: pixi run wheel
+
+      - name: Package demo notebooks
+        run: |
+          NOTEBOOKS_DIR=notebooks
+          rm -f litelm-notebooks.zip
+          zip -j litelm-notebooks.zip \
+            "$NOTEBOOKS_DIR"/*.ipynb
+
+      - name: Publish package
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_TOKEN }}
+          verbose: true
+          attestations: false
+
+      - name: Upload notebooks asset
+        uses: softprops/action-gh-release@v3
+        with:
+          files: litelm-notebooks.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

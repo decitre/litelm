@@ -13,17 +13,25 @@ Browser-native LLM orchestration in JupyterLite - run language models entirely i
 - **Model caching**: Download once, use offline forever
 - **Pythonic API**: Clean, async Python interface
 
-<!--
 ## Quick Start
 
 ### Try the Demo (No Installation)
 
-Visit the live demo at: [https://decitre.github.io/litelm/pyodide/](https://decitre.github.io/litelm/pyodide/)
+**Recommended**: Visit the live demo with xeus-python kernel at:
+👉 [https://decitre.github.io/litelm/](https://decitre.github.io/litelm/)
+
+**Alternative**: Pyodide kernel demo at:
+[https://decitre.github.io/litelm/pyodide/](https://decitre.github.io/litelm/pyodide/)
 
 Open the `demo.ipynb` notebook and run the cells to see LiteLM in action.
 
-**Note**: LiteLM is designed to run in JupyterLite/Pyodide environments. For local development and testing, see the Development section below.
--->
+### Install from PyPI
+
+```bash
+pip install litelm
+```
+
+**Note**: LiteLM is designed to run in JupyterLite environments (xeus-python or pyodide kernels). For local development and testing, see the Development section below.
 
 ## Usage
 
@@ -127,7 +135,8 @@ pixi run wheel
 ```bash
 pixi run lite-build
 ```
-Follow the instructions
+
+Follow the instructions provided by the command.
 
 ### Run Tests in Different Python Versions
 
@@ -139,15 +148,18 @@ pixi run --environment py313 test
 
 ## How It Works
 
-LiteLM bridges Python (via Pyodide) and JavaScript (via Transformers.js):
+LiteLM bridges Python (via xeus-python or pyodide) and JavaScript (via Transformers.js):
 
 1. **JavaScript Layer**: Uses [@huggingface/transformers](https://www.npmjs.com/package/@xenova/transformers) to run ONNX models in the browser
 2. **Python Bridge**: Exposes JavaScript functionality through a Pythonic async API
-3. **Model Loading**:
+3. **Kernel Support**:
+   - **xeus-python** (recommended): Full CPython in WebAssembly via emscripten
+   - **pyodide**: Alternative WebAssembly Python runtime
+4. **Model Loading**:
    - First run: Downloads models from HuggingFace CDN
    - Cached: Uses browser's Cache API or IndexedDB
-   - Local: Reads from Pyodide filesystem if available
-4. **Execution**: Models run entirely in-browser using WebAssembly (WASM)
+   - Local: Reads from virtual filesystem if available
+5. **Execution**: Models run entirely in-browser using WebAssembly (WASM)
 
 ## Supported Models
 
@@ -164,14 +176,16 @@ For other models, check [Xenova's model list](https://huggingface.co/Xenova).
 
 ```
 ┌─────────────────────────────────────┐
-│   Python (Pyodide/JupyterLite)      │
+│   Python (JupyterLite)              │
+│   ├─ xeus-python (recommended)      │
+│   └─ pyodide (alternative)          │
 │                                     │
 │   from litelm import LLM            │
 │   llm = await LLM.create()          │
 │   text = await llm.generate(...)    │
 └─────────────┬───────────────────────┘
               │ Bridge
-              │ (pyodide.ffi)
+              │ (pyodide.ffi / pjs)
 ┌─────────────▼───────────────────────┐
 │   JavaScript (Browser)              │
 │                                     │
@@ -182,23 +196,6 @@ For other models, check [Xenova's model list](https://huggingface.co/Xenova).
 └─────────────────────────────────────┘
 ```
 
-## Examples
-
-See the `notebooks/demo.ipynb` for a comprehensive tutorial covering:
-- Basic text generation
-- Embeddings and similarity search
-- Building a simple RAG pipeline
-- Model configuration and customization
-
-## Contributing
-
-Contributions are welcome! Please:
-
-1. Fork the repository
-2. Create a feature branch
-3. Run tests: `pixi run test`
-4. Run linter: `pixi run lint`
-5. Submit a pull request
 
 ## License
 

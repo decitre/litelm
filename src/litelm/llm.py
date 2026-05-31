@@ -59,7 +59,30 @@ class LLM:
             else:
                 print(f"No local model found at {local_model_path}, will download from HuggingFace")
 
-        instance = createLLM(config)
+        # Convert Python dict to JS object for compatibility with xeus-python
+        try:
+            # Try pyodide first (pyodide kernel)
+            from pyodide.ffi import to_js
+
+            js_config = to_js(config, dict_converter=lambda d: d)
+        except ImportError:
+            # In xeus-python, use pjs module (no dict_converter arg)
+            try:
+                from pjs import to_js
+
+                js_config = to_js(config)
+            except ImportError:
+                # Fallback: pass dict directly (works in some environments)
+                js_config = config
+        except TypeError:
+            # pyodide.ffi.to_js exists but dict_converter not supported
+            # Try simple to_js without dict_converter
+            try:
+                js_config = to_js(config)
+            except Exception:
+                js_config = config
+
+        instance = createLLM(js_config)
         await instance.init()
 
         return cls(instance)
@@ -84,7 +107,24 @@ class LLM:
         for doc in docs:
             doc_vecs.append(await self.embed(doc))
 
-        sims = cosineSimilarityBatch(query_vec, doc_vecs)
+        # Convert Python lists to JS arrays for the JS function
+        try:
+            from pyodide.ffi import to_js
+
+            js_query_vec = to_js(query_vec)
+            js_doc_vecs = to_js(doc_vecs)
+        except ImportError:
+            try:
+                from pjs import to_js
+
+                js_query_vec = to_js(query_vec)
+                js_doc_vecs = to_js(doc_vecs)
+            except ImportError:
+                # Fallback: hope it works
+                js_query_vec = query_vec
+                js_doc_vecs = doc_vecs
+
+        sims = cosineSimilarityBatch(js_query_vec, js_doc_vecs)
 
         results = list(zip(docs, sims))
         results.sort(key=lambda x: x[1], reverse=True)

@@ -60,6 +60,64 @@ class TestLLMEmbed:
         mock_js_instance.embed.assert_awaited_once_with("Test text")
 
 
+class TestLLMSimilaritySearch:
+    """Test LLM similarity search."""
+
+    async def test_similarity_search(self):
+        """Test similarity search with mocked JS function."""
+        from litelm import LLM
+
+        mock_js_instance = MagicMock()
+        # Mock embeddings
+        mock_js_instance.embed = AsyncMock(
+            side_effect=[
+                [1.0, 0.0],  # query
+                [1.0, 0.0],  # doc1 - perfect match
+                [0.0, 1.0],  # doc2 - orthogonal
+                [0.7, 0.7],  # doc3 - partial match
+            ]
+        )
+
+        llm = LLM(mock_js_instance)
+
+        # Mock the JS cosineSimilarityBatch function
+        mock_similarities = [1.0, 0.0, 0.7]
+
+        import sys
+
+        mock_js_module = MagicMock()
+        mock_js_module.cosineSimilarityBatch = MagicMock(return_value=mock_similarities)
+        sys.modules["js"] = mock_js_module
+
+        # Mock to_js to just return the input (simulating successful conversion)
+        mock_pyodide_module = MagicMock()
+        mock_pyodide_module.ffi = MagicMock()
+        mock_pyodide_module.ffi.to_js = MagicMock(side_effect=lambda x: x)
+
+        try:
+            # Mock pyodide.ffi module
+            sys.modules["pyodide"] = mock_pyodide_module
+            sys.modules["pyodide.ffi"] = mock_pyodide_module.ffi
+
+            results = await llm.similarity_search("query", ["doc1", "doc2", "doc3"])
+
+            # Results should be sorted by similarity (descending)
+            assert len(results) == 3
+            assert results[0] == ("doc1", 1.0)
+            assert results[1] == ("doc3", 0.7)
+            assert results[2] == ("doc2", 0.0)
+
+            # Verify cosineSimilarityBatch was called
+            mock_js_module.cosineSimilarityBatch.assert_called_once()
+        finally:
+            if "js" in sys.modules:
+                del sys.modules["js"]
+            if "pyodide" in sys.modules:
+                del sys.modules["pyodide"]
+            if "pyodide.ffi" in sys.modules:
+                del sys.modules["pyodide.ffi"]
+
+
 class TestLLMExportModelFiles:
     """Test LLM model export functionality."""
 
@@ -191,8 +249,14 @@ class TestLLMAutoDetect:
 
                     # Verify createLLM was called with use_local_models=True
                     config = mock_js_module.createLLM.call_args[0][0]
-                    assert config["use_local_models"] is True
-                    assert "emfs_model_uri" in config
+                    # Config might be dict or dict-like object after to_js conversion
+                    if hasattr(config, "get"):
+                        assert config.get("use_local_models") is True
+                        assert "emfs_model_uri" in config
+                    else:
+                        # It's a plain dict in CPython tests
+                        assert config["use_local_models"] is True
+                        assert "emfs_model_uri" in config
                 finally:
                     if "js" in sys.modules:
                         del sys.modules["js"]
