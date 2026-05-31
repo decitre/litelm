@@ -91,7 +91,7 @@ root = "src"
 include = ["src"]
 
 [bumpver]
-current_version = "0.2.1"
+current_version = "0.2.2"
 version_pattern = "MAJOR.MINOR.PATCH"
 commit_message = "bump version {old_version} -> {new_version}"
 commit = true
@@ -109,12 +109,12 @@ push = true
 [tool.pixi.workspace]
 name = "lmlite"
 channels = ["conda-forge"]
-# Supported platforms: macOS and Linux only (Windows not supported)
 platforms = ["osx-arm64", "osx-64", "linux-64"]
 
 [tool.pixi.dependencies]
 python = ">=3.11,<3.14"
 xeus-python = "*"
+uv = "*"
 
 [tool.pixi.feature.dev.dependencies]
 pytest = "*"

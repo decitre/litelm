@@ -57,3 +57,4 @@ workspace/
 .python-version
 venv/
 .pixi/
+pixi.lock
