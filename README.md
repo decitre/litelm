@@ -164,11 +164,11 @@ For other models, check [Xenova's model list](https://huggingface.co/Xenova).
 
 ```
 ┌─────────────────────────────────────┐
-│   Python (Pyodide/JupyterLite)     │
+│   Python (Pyodide/JupyterLite)      │
 │                                     │
-│   from litelm import LLM           │
-│   llm = await LLM.create()         │
-│   text = await llm.generate(...)   │
+│   from litelm import LLM            │
+│   llm = await LLM.create()          │
+│   text = await llm.generate(...)    │
 └─────────────┬───────────────────────┘
               │ Bridge
               │ (pyodide.ffi)
@@ -177,8 +177,8 @@ For other models, check [Xenova's model list](https://huggingface.co/Xenova).
 │                                     │
 │   Transformers.js                   │
 │   ├─ Model loading                  │
-│   ├─ ONNX Runtime (WASM)           │
-│   └─ WebGPU (optional)             │
+│   ├─ ONNX Runtime (WASM)            │
+│   └─ WebGPU (optional)              │
 └─────────────────────────────────────┘
 ```
 
