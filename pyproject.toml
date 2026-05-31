@@ -109,6 +109,7 @@ push = true
 [tool.pixi.workspace]
 name = "litelm"
 channels = ["conda-forge"]
+# Supported platforms: macOS and Linux only (Windows not supported)
 platforms = ["osx-arm64", "osx-64", "linux-64"]
 
 [tool.pixi.dependencies]

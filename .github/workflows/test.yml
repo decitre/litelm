@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest]
     steps:
       # https://github.com/actions/checkout
       # https://github.com/prefix-dev/setup-pixi
@@ -35,13 +35,6 @@ jobs:
       - name: Test (Linux / macOS)
         if: matrix.os != 'windows-latest'
         run: pixi run test-all
-
-      - name: Test (Windows)
-        if: matrix.os == 'windows-latest'
-        run: |
-          pixi run --environment py311 test
-          pixi run --environment py312 test
-          pixi run --environment py313 test
 
       - name: Lint
         if: matrix.os == 'ubuntu-latest'

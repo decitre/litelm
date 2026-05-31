@@ -13,12 +13,13 @@ Browser-native LLM orchestration in JupyterLite - run language models entirely i
 - **Model caching**: Download once, use offline forever
 - **Pythonic API**: Clean, async Python interface
 
+<!-- To re-introduce when the Actions page is up
 ## Quick Start
 
 ### Try the Demo (No Installation)
 
 **Recommended**: Visit the live demo with xeus-python kernel at:
-👉 [https://decitre.github.io/litelm/](https://decitre.github.io/litelm/)
+[https://decitre.github.io/litelm/](https://decitre.github.io/litelm/)
 
 **Alternative**: Pyodide kernel demo at:
 [https://decitre.github.io/litelm/pyodide/](https://decitre.github.io/litelm/pyodide/)
@@ -32,6 +33,8 @@ pip install litelm
 ```
 
 **Note**: LiteLM is designed to run in JupyterLite environments (xeus-python or pyodide kernels). For local development and testing, see the Development section below.
+
+-->
 
 ## Usage
 
@@ -97,7 +100,11 @@ The exported files will be saved to `/drive/models/` and can be downloaded from 
 ## Development
 
 ### Prerequisites
-[pixi](https://pixi.sh/) and [micromamba](https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html) package managers
+
+- [pixi](https://pixi.sh/) - Package manager (required)
+- [micromamba](https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html) - Conda package manager (required for JupyterLite builds)
+
+**Supported Platforms**: macOS (Intel/Apple Silicon) and Linux. Windows is not currently supported for development.
 
 ### Setup
 
