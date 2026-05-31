@@ -91,7 +91,7 @@ root = "src"
 include = ["src"]
 
 [bumpver]
-current_version = "0.2.0"
+current_version = "0.2.1"
 version_pattern = "MAJOR.MINOR.PATCH"
 commit_message = "bump version {old_version} -> {new_version}"
 commit = true
@@ -156,4 +156,5 @@ lint = "ruff check src tests scripts --fix && ruff format src tests scripts"
 lint-check = "ruff check src tests scripts && ruff format src tests scripts --check"
 bumpver = "bumpver update --set-version"
 wheel = "rm -rf dist build; python -m build --sdist --wheel"
+twine = "twine upload dist/*"
 lite-build = { cmd = ["bash", "scripts/lite-build.sh"] }
