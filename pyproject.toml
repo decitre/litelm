@@ -116,12 +116,12 @@ platforms = ["osx-arm64", "osx-64", "linux-64"]
 python = ">=3.11,<3.14"
 xeus-python = "*"
 
-
 [tool.pixi.feature.dev.dependencies]
 pytest = "*"
 pytest-asyncio = "*"
 pytest-cov = "*"
 ruff = "*"
+twine = "*"
 
 [tool.pixi.feature.dev.pypi-dependencies]
 bumpver = "*"
