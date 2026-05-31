@@ -1,0 +1,6 @@
+LiteLM
+
+This project includes code developed by Emmanuel Decitre.
+
+It uses Transformers.js (Apache License 2.0).
+Models loaded at runtime may be subject to their own licenses.
