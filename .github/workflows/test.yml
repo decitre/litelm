@@ -30,7 +30,6 @@ jobs:
         with:
           environments: py311 py312 py313
           cache: true
-          frozen: true
 
       - name: Test (Linux / macOS)
         if: matrix.os != 'windows-latest'
@@ -68,7 +67,6 @@ jobs:
         with:
           environments: default
           cache: true
-          frozen: true
 
       - name: Create page
         run: |
