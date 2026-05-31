@@ -1,4 +1,4 @@
-# LiteLM
+# lmLite
 
 Browser-native LLM orchestration in JupyterLite - run language models entirely in your browser using WebAssembly.
 
@@ -19,27 +19,27 @@ Browser-native LLM orchestration in JupyterLite - run language models entirely i
 ### Try the Demo (No Installation)
 
 **Recommended**: Visit the live demo with xeus-python kernel at:
-[https://decitre.github.io/litelm/](https://decitre.github.io/litelm/)
+[https://decitre.github.io/lmlite/](https://decitre.github.io/lmlite/)
 
 **Alternative**: Pyodide kernel demo at:
-[https://decitre.github.io/litelm/pyodide/](https://decitre.github.io/litelm/pyodide/)
+[https://decitre.github.io/lmlite/pyodide/](https://decitre.github.io/lmlite/pyodide/)
 
-Open the `demo.ipynb` notebook and run the cells to see LiteLM in action.
+Open the `demo.ipynb` notebook and run the cells to see LMLite in action.
 
 ### Install from PyPI
 
 ```bash
-pip install litelm
+pip install lmlite
 ```
 
-**Note**: LiteLM is designed to run in JupyterLite environments (xeus-python or pyodide kernels). For local development and testing, see the Development section below.
+**Note**: LMLite is designed to run in JupyterLite environments (xeus-python or pyodide kernels). For local development and testing, see the Development section below.
 
 -->
 
 ## Usage
 
 ```python
-from litelm import LLM
+from lmlite import LLM
 
 # Create LLM instance (downloads model on first run)
 llm = await LLM.create(generator_model="gpt2")
@@ -110,8 +110,8 @@ The exported files will be saved to `/drive/models/` and can be downloaded from 
 
 ```bash
 # Clone the repository
-git clone https://github.com/decitre/litelm.git
-cd litelm
+git clone https://github.com/decitre/lmlite.git
+cd lmlite
 pixi install
 ```
 
@@ -155,7 +155,7 @@ pixi run --environment py313 test
 
 ## How It Works
 
-LiteLM bridges Python (via xeus-python or pyodide) and JavaScript (via Transformers.js):
+LMLite bridges Python (via xeus-python or pyodide) and JavaScript (via Transformers.js):
 
 1. **JavaScript Layer**: Uses [@huggingface/transformers](https://www.npmjs.com/package/@xenova/transformers) to run ONNX models in the browser
 2. **Python Bridge**: Exposes JavaScript functionality through a Pythonic async API
@@ -187,7 +187,7 @@ For other models, check [Xenova's model list](https://huggingface.co/Xenova).
 │   ├─ xeus-python (recommended)      │
 │   └─ pyodide (alternative)          │
 │                                     │
-│   from litelm import LLM            │
+│   from lmlite import LLM            │
 │   llm = await LLM.create()          │
 │   text = await llm.generate(...)    │
 └─────────────┬───────────────────────┘
@@ -237,13 +237,13 @@ Ensure you're running from `http://localhost` or a proper HTTPS domain, not `fil
 
 ## Citation
 
-If you use LiteLM in your research, please cite:
+If you use LMLite in your research, please cite:
 
 ```bibtex
-@software{litelm2026,
+@software{lmlite2026,
   author = {Decitre, Emmanuel},
-  title = {LiteLM: Browser-native LLM orchestration in JupyterLite},
+  title = {LMLite: Browser-native LLM orchestration in JupyterLite},
   year = {2026},
-  url = {https://github.com/decitre/litelm}
+  url = {https://github.com/decitre/lmlite}
 }
 ```

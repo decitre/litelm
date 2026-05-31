@@ -54,7 +54,7 @@ eof
         --output-dir public \
         --XeusAddon.environment_file=$(pwd)/environment.yml \
         --XeusAddon.mount_jupyterlite_content=True \
-        --XeusAddon.mounts="$ROOT_DIR/src/litelm:/lib/python3.13/site-packages/litelm"
+        --XeusAddon.mounts="$ROOT_DIR/src/lmlite:/lib/python3.13/site-packages/lmlite"
 
     deactivate
     popd
@@ -72,7 +72,7 @@ process_for_pyodide() {
     $pip_cmd install build -e '..' \
       jupyter_server jupyterlab_server jupyterlite-core jupyterlite-pyodide-kernel libarchive-c
 
-    printf "${YELLOW}Build litelm wheel${NC}\n"
+    printf "${YELLOW}Build lmlite wheel${NC}\n"
     $PYTHON_CMD -m build "$ROOT_DIR" --wheel --outdir content-pyodide --skip-dependency-check
 
     printf "${YELLOW}Copy static content for jupyterlite-pyodide site${NC}\n"
@@ -82,7 +82,7 @@ process_for_pyodide() {
     $PYTHON_CMD "$SCRIPT_DIR/generate_install.py" \
         --pyproject "$ROOT_DIR/pyproject.toml" \
         --output content-pyodide/install.py \
-        --package-name litelm
+        --package-name lmlite
 
     printf "${YELLOW}Patch notebooks${NC}\n"
     $PYTHON_CMD "$SCRIPT_DIR/patch_notebooks.py" \

@@ -3110,7 +3110,7 @@ packages:
   size: 245404
   timestamp: 1779124076307
 - pypi: .
-  name: litelm
+  name: lmlite
   requires_python: '>=3.11'
 - pypi: https://files.pythonhosted.org/packages/0c/c3/44f3fbbfa403ea2a7c779186dc20772604442dde72947e7d01069cbe98e3/pycparser-3.0-py3-none-any.whl
   name: pycparser

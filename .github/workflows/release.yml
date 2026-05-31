@@ -26,8 +26,8 @@ jobs:
       - name: Package demo notebooks
         run: |
           NOTEBOOKS_DIR=notebooks
-          rm -f litelm-notebooks.zip
-          zip -j litelm-notebooks.zip \
+          rm -f lmlite-notebooks.zip
+          zip -j lmlite-notebooks.zip \
             "$NOTEBOOKS_DIR"/*.ipynb
 
       - name: Publish package
@@ -41,6 +41,6 @@ jobs:
       - name: Upload notebooks asset
         uses: softprops/action-gh-release@v3
         with:
-          files: litelm-notebooks.zip
+          files: lmlite-notebooks.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

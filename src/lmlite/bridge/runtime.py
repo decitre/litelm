@@ -20,7 +20,7 @@ def ensure_runtime():
 
     from importlib.resources import files
 
-    js_code = files("litelm").joinpath("js/llm.js").read_text()
+    js_code = files("lmlite").joinpath("js/llm.js").read_text()
 
     js_eval(js_code)
 

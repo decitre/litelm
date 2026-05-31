@@ -1,4 +1,4 @@
-# LiteLM - Browser-native LLM orchestration in JupyterLite
+# lmLite - Browser-native LLM orchestration in JupyterLite
 # Copyright 2026 Emmanuel Decitre
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,7 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "litelm"
+name = "lmlite"
 description = "Browser-native LLM orchestration in JupyterLite"
 readme = "README.md"
 authors = [ {name = "Emmanuel Decitre", email = "590094+decitre@users.noreply.github.com"} ]
@@ -43,10 +43,10 @@ dependencies = [ ]
 dynamic = ["version"]
 
 [tool.setuptools.dynamic]
-version = {attr = "litelm.__version__"}
+version = {attr = "lmlite.__version__"}
 
 [project.urls]
-repository = "https://github.com/decitre/litelm"
+repository = "https://github.com/decitre/lmlite"
 
 [tool.setuptools]
 include-package-data = true
@@ -56,7 +56,7 @@ where = ["src"]
 namespaces = true
 
 [tool.setuptools.package-data]
-"litelm" = [
+"lmlite" = [
     "notebooks/*.ipynb",
     "js/*.js",
 ]
@@ -102,12 +102,12 @@ push = true
 "pyproject.toml" = [
     '^current_version = "{version}"',
 ]
-"src/litelm/__init__.py" = [
+"src/lmlite/__init__.py" = [
     '__version__ = "{version}"'
 ]
 
 [tool.pixi.workspace]
-name = "litelm"
+name = "lmlite"
 channels = ["conda-forge"]
 # Supported platforms: macOS and Linux only (Windows not supported)
 platforms = ["osx-arm64", "osx-64", "linux-64"]
@@ -144,7 +144,7 @@ py312 = ["py312", "dev"]
 py313 = ["py313", "dev"]
 
 [tool.pixi.pypi-dependencies]
-litelm = { path = ".", editable = true }
+lmlite = { path = ".", editable = true }
 
 [tool.pixi.tasks]
 test = "pytest tests -vv --full-trace"

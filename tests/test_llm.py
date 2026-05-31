@@ -11,7 +11,7 @@ class TestLLMDefaults:
     """Test LLM class defaults and configuration."""
 
     def test_defaults(self):
-        from litelm import LLM
+        from lmlite import LLM
 
         assert LLM.DEFAULTS["generator_model"] == "gpt2"
         assert LLM.DEFAULTS["embedding_model"] == "all-MiniLM-L6-v2"
@@ -29,7 +29,7 @@ class TestLLMGenerate:
 
     async def test_generate(self):
         """Test generate method calls JS instance."""
-        from litelm import LLM
+        from lmlite import LLM
 
         mock_js_instance = MagicMock()
         mock_js_instance.generate = AsyncMock(return_value="Generated text")
@@ -46,7 +46,7 @@ class TestLLMEmbed:
 
     async def test_embed(self):
         """Test embed method calls JS instance and returns list."""
-        from litelm import LLM
+        from lmlite import LLM
 
         mock_js_instance = MagicMock()
         # JS returns a JS array-like object
@@ -65,7 +65,7 @@ class TestLLMSimilaritySearch:
 
     async def test_similarity_search(self):
         """Test similarity search with mocked JS function."""
-        from litelm import LLM
+        from lmlite import LLM
 
         mock_js_instance = MagicMock()
         # Mock embeddings
@@ -123,7 +123,7 @@ class TestLLMExportModelFiles:
 
     async def test_export_model_files_already_exists_zip(self):
         """Test that export skips if zip already exists."""
-        from litelm import LLM
+        from lmlite import LLM
 
         mock_js_instance = MagicMock()
 
@@ -148,7 +148,7 @@ class TestLLMExportModelFiles:
 
     async def test_export_model_files_already_exists_dir(self):
         """Test that export skips if directory already exists."""
-        from litelm import LLM
+        from lmlite import LLM
 
         mock_js_instance = MagicMock()
         llm = LLM(mock_js_instance)
@@ -161,7 +161,7 @@ class TestLLMExportModelFiles:
 
     async def test_export_model_files_string_result(self):
         """Test handling string result from JS side."""
-        from litelm import LLM
+        from lmlite import LLM
 
         mock_js_instance = MagicMock()
         mock_js_instance.exportModelFiles = AsyncMock(return_value="Export complete")
@@ -175,7 +175,7 @@ class TestLLMExportModelFiles:
 
     async def test_export_model_files_with_js_files(self):
         """Test exporting model files when JS returns file objects."""
-        from litelm import LLM
+        from lmlite import LLM
 
         mock_js_instance = MagicMock()
 
@@ -218,7 +218,7 @@ class TestLLMAutoDetect:
 
     async def test_auto_detect_zip_extraction(self):
         """Test that zip files are automatically extracted."""
-        from litelm import LLM
+        from lmlite import LLM
 
         mock_js_instance = MagicMock()
         mock_js_instance.init = AsyncMock()
@@ -236,7 +236,7 @@ class TestLLMAutoDetect:
             mock_js_module = MagicMock()
             mock_js_module.createLLM = MagicMock(return_value=mock_js_instance)
 
-            with patch("litelm.llm.ensure_runtime"):
+            with patch("lmlite.llm.ensure_runtime"):
                 sys.modules["js"] = mock_js_module
                 try:
                     await LLM.create(local_models_path=tmpdir, generator_model="gpt2")

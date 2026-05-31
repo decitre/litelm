@@ -21,7 +21,7 @@ def main():
     parser = argparse.ArgumentParser(description="Generate install.py for pyodide")
     parser.add_argument("--pyproject", type=Path, required=True, help="Path to pyproject.toml")
     parser.add_argument("--output", type=Path, required=True, help="Output path for install.py")
-    parser.add_argument("--package-name", default="litelm", help="Package name (default: litelm)")
+    parser.add_argument("--package-name", default="lmlite", help="Package name (default: lmlite)")
     args = parser.parse_args()
 
     # Read pyproject.toml
